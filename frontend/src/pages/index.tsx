@@ -52,7 +52,7 @@ export default function Home() {
       <img
         src="bg-art/amongus.svg"
         alt=""
-        className="absolute -top-32 -left-16 h-2/3 animate-spin"
+        className="absolute -top-24 -left-16 h-1/3 animate-spin"
       />
       <div className="w-full z-20 flex items-center justify-between flex-col md:flex-row">
         <div className="text-neutral-950 font-bold py-4 w-full flex flex-col justify-center items-center gap-4">
