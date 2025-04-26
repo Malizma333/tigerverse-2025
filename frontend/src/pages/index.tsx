@@ -50,9 +50,15 @@ export default function Home() {
 	return (
 		<div className="bg-white relative w-full min-h-screen flex justify-center items-center px-8 font-inter">
 			<img src="bg-art/amongus.svg" alt="" className="absolute -top-32 -left-16 h-2/3 animate-spin" />
-			<div className="z-20 flex flex-col justify-center items-center">
-				<div className="text-neutral-950 font-bold py-4 w-full flex justify-center items-center gap-8">
-					<Logo />
+			<div className="w-full z-20 flex flex-row items-center justify-between">
+				<div className="text-neutral-950 font-bold py-4 w-full flex flex-row md:flex-col justify-center items-center gap-4">
+					<img className="w-100" src="logo.svg"></img>
+          <div className="font-drawing text-6xl text-center leading-20">Make the world <br></br> 
+            <span className="text-pink-400 relative mr-12">
+              <object className="absolute -top-8 -left-10" data="circle.svg" type="image/svg+xml" width={200} height={150}/>
+              your
+            </span>
+            canvas.</div>
 				</div>
 				<form onSubmit={handleSubmit} className="flex flex-col w-full items-center gap-8 py-16 relative">
 					<label htmlFor={fileInputId} className="rounded-md w-fit z-10 transition-all duration-100 cursor-pointer">
