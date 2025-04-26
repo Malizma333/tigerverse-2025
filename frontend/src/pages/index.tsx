@@ -3,10 +3,10 @@ import Logo from "../components/logo";
 import React, { useState } from "react";
 
 export default function Home() {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<any>(null);
   const fileInputId = "image-upload";
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!selectedImage) {
        console.log("No image selected");
@@ -46,8 +46,8 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-neutral-300 relative w-full min-h-screen flex justify-center items-center px-8 font-inter">
-      <div className="absolute z-10 bg-[url('/tiger.webp')] bg-size-[auto_75px] w-full h-full opacity-3"></div>
+    <div className="bg-white relative w-full min-h-screen flex justify-center items-center px-8 font-inter">
+        <img src="bg-art/amongus.svg" alt="" className="absolute -top-32 -left-16 h-2/3 rotate-32"/>
       <div className="z-20 flex flex-col justify-center items-center">
         <div className="text-neutral-950 font-bold py-4 w-full flex justify-center items-center gap-8">
           <Logo />
@@ -56,11 +56,11 @@ export default function Home() {
           <div className="bg-[url('/border.webp')] bg-no-repeat bg-contain bg-center p-16 group">
             <label
               htmlFor={fileInputId}
-              className="rounded-md w-fit z-10 group-hover:scale-105 transition-all duration-100 relative cursor-pointer"
+              className="rounded-md w-fit z-10 group-hover:scale-105 transition-all duration-100 cursor-pointer"
             >
               <img
                 className="absolute w-40 animate-bouncey"
-                src="./top.svg"
+                src="/top.svg"
                 alt="Upload graphic top part"
               />
               <img
@@ -93,7 +93,7 @@ export default function Home() {
           )}
 
           <button
-            className={`bg-neutral-950 w-full text-white text-sm font-semibold px-6 py-2 rounded-md shadow hover:bg-neutral-600 transition-all hover:cursor-pointer duration-100 disabled:bg-neutral-400 disabled:cursor-not-allowed`}
+            className={`bg-neutral-950 w-full text-white text-sm font-semibold px-6 py-4 rounded-md shadow hover:bg-neutral-600 transition-all hover:cursor-pointer duration-100 disabled:bg-neutral-400 disabled:cursor-not-allowed`}
             type="submit"
             disabled={!selectedImage}
            >
