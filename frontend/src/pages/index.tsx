@@ -27,9 +27,11 @@ export default function Home() {
 				if (contentType && contentType.includes('application/json')) {
 					const data = await response.json();
 					console.log('Upload success:', data);
+          alert("Uploaded image successfully.");
 				} else {
 					const text = await response.text();
 					console.log('Upload success (non-JSON response):', text);
+          alert("Uploaded image successfully.");
 				}
 			} else {
 				if (contentType && contentType.includes('application/json')) {
@@ -53,9 +55,9 @@ export default function Home() {
 					<Logo />
 				</div>
 				<form onSubmit={handleSubmit} className="flex flex-col w-full items-center gap-8 py-16 relative">
-					<label htmlFor={fileInputId} className="rounded-md w-fit z-10 group-hover:scale-105 transition-all duration-100 cursor-pointer">
+					<label htmlFor={fileInputId} className="rounded-md w-fit z-10 transition-all duration-100 cursor-pointer">
 						<div className="bg-[url('/border.webp')] bg-no-repeat bg-contain bg-center p-16 group">
-							<div className="group-hover:scale-105 transition-all duration-100">
+							<div className="group-hover:scale-110 transition-all duration-100">
 								<img className="absolute w-40 animate-bouncey" src="/top.svg" alt="Upload graphic top part" />
 								<img className="w-40 mt-1" src="./bottom.svg" alt="Upload graphic bottom part" />
 								<input
@@ -80,11 +82,12 @@ export default function Home() {
 					{selectedImage && <div className="text-sm -mt-10 font-extralight text-neutral-700">Selected: {selectedImage.name}</div>}
 
 					<button
-						className={`bg-neutral-950 w-full text-white text-sm font-semibold px-6 py-4 rounded-md shadow hover:bg-neutral-600 transition-all hover:cursor-pointer duration-100 disabled:bg-neutral-400 disabled:cursor-not-allowed`}
+
+						className={` w-30 ${selectedImage && "hover:scale-105" } transition-all hover:cursor-pointer duration-100 disabled:invert-20 disabled:cursor-not-allowed`}
 						type="submit"
 						disabled={!selectedImage}
 					>
-						Upload
+            <img src="/submit.png"></img>
 					</button>
 				</form>
 			</div>
