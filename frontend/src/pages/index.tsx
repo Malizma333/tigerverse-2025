@@ -27,11 +27,9 @@ export default function Home() {
             if (contentType && contentType.includes("application/json")) {
               const data = await response.json();
               console.log("Upload success:", data);
-              // Optionally reset selection: setSelectedImage(null);
             } else {
               const text = await response.text();
               console.log("Upload success (non-JSON response):", text);
-              // Optionally reset selection: setSelectedImage(null);
             }
         } else {
             if (contentType && contentType.includes("application/json")) {
@@ -54,37 +52,39 @@ export default function Home() {
         <div className="text-neutral-950 font-bold py-4 w-full flex justify-center items-center gap-8">
           <Logo />
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col w-full items-center gap-8 py-16">
-          <label
-            htmlFor={fileInputId}
-            className="rounded-md w-fit hover:scale-105 transition-all duration-100 relative cursor-pointer"
-          >
-            <img
-              className="absolute w-40 animate-bouncey"
-              src="./top.svg"
-              alt="Upload graphic top decoration"
-            />
-            <img
-              className="w-40 mt-1"
-              src="./bottom.svg"
-              alt="Upload graphic bottom part"
-            />
-            <input
-              id={fileInputId}
-              className="hidden"
-              type="file"
-              name="image"
-              accept="image/*"
-              onChange={(event) => {
-                if (event.target.files && event.target.files[0]) {
-                  setSelectedImage(event.target.files[0]);
-                  console.log("File selected:", event.target.files[0].name);
-                } else {
-                  setSelectedImage(null);
-                }
-              }}
-            />
-          </label>
+        <form onSubmit={handleSubmit} className="flex flex-col w-full items-center gap-8 py-16 relative">
+          <div className="bg-[url('/border.webp')] bg-no-repeat bg-contain bg-center p-16 group">
+            <label
+              htmlFor={fileInputId}
+              className="rounded-md w-fit z-10 group-hover:scale-105 transition-all duration-100 relative cursor-pointer"
+            >
+              <img
+                className="absolute w-40 animate-bouncey"
+                src="./top.svg"
+                alt="Upload graphic top part"
+              />
+              <img
+                className="w-40 mt-1"
+                src="./bottom.svg"
+                alt="Upload graphic bottom part"
+              />
+              <input
+                id={fileInputId}
+                className="hidden"
+                type="file"
+                name="image"
+                accept="image/png, image/jpeg, image/webp"
+                onChange={(event) => {
+                  if (event.target.files && event.target.files[0]) {
+                    setSelectedImage(event.target.files[0]);
+                    console.log("File selected:", event.target.files[0].name);
+                  } else {
+                    setSelectedImage(null);
+                  }
+                }}
+              />
+            </label>
+          </div>
 
           {selectedImage && (
              <div className="text-sm -mt-10 font-extralight text-neutral-700">
