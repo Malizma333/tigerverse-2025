@@ -95,27 +95,30 @@ export default function Home() {
     >
       <a
         href="/gallery"
-        className="absolute bottom-0 right-0 flex justify-center items-center m-12 z-100 hover:scale-105 "
+        className="absolute bottom-0 right-0 flex justify-center items-center m-12 z-100 hover:scale-105 transition-all duration-100"
       >
-        <div
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
           className={`
-                  p-4
-                  bg-[url('/button.svg')]
-                  bg-center
-                  bg-no-repeat
-                  bg-contain
-                  text-center
-                  font-semibold
-                  flex items-center justify-center
-                  group-hover:scale-105
-                  transition-all
-                  duration-100
-                  cursor-pointer
-                  text-neutral-950 font-drawing text-xl
-                `}
+                          p-4
+                          bg-[url('/button.svg')]
+                          bg-center
+                          bg-no-repeat
+                          bg-contain
+                          text-center
+                          font-semibold
+                          flex items-center justify-center
+                          group-hover:scale-105
+                          transition-all
+                          duration-100
+                          cursor-pointer
+                          text-neutral-950 font-drawing text-xl
+                        `}
         >
           Gallery
-        </div>
+        </motion.div>
       </a>
       <ToastContainer />
       <img
