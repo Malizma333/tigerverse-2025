@@ -5,12 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-
 public class ImagePull : MonoBehaviour
 {
-    private string imageListUrl = "https://tigerverse-2025.onrender.com/images"; // This gives array of IDs
-    private string imageFetchUrlBase = "https://tigerverse-2025.onrender.com/image/"; // Base for downloading by ID
-    public GameObject prefabToCopy; // Drag your prefab here
+    private string imageListUrl = "https://tigerverse-2025.onrender.com/images";
+    private string imageFetchUrlBase = "https://tigerverse-2025.onrender.com/image/";
+    public GameObject prefabToCopy;
     public Renderer imagePanel;
 
     void Start()
@@ -20,7 +19,6 @@ public class ImagePull : MonoBehaviour
 
     IEnumerator DownloadIDsAndImages()
     {
-        // Get IDs
         UnityWebRequest request = UnityWebRequest.Get(imageListUrl);
         yield return request.SendWebRequest();
 
@@ -31,45 +29,51 @@ public class ImagePull : MonoBehaviour
         }
 
         string jsonResult = request.downloadHandler.text;
+        List<ImageData> images = ParseJsonArray(jsonResult);
 
-        // Parse array
-        List<string> ids = ParseJsonArray(jsonResult);
-
-        if (ids == null || ids.Count == 0)
+        if (images == null || images.Count == 0)
         {
-            Debug.LogError("No IDs found in the server response.");
+            Debug.LogError("No images found in the server response.");
             yield break;
         }
 
-        // Pull imgs from ids
-        foreach (string id in ids)
+        foreach (ImageData imageData in images)
         {
-            StartCoroutine(DownloadImageAndCreatePrefab(id));
+            StartCoroutine(DownloadImageAndCreatePrefab(imageData));
         }
     }
 
-    IEnumerator DownloadImageAndCreatePrefab(string id)
+    IEnumerator DownloadImageAndCreatePrefab(ImageData imageData)
     {
-        string imageUrl = imageFetchUrlBase + id;
+        string imageUrl = imageFetchUrlBase + imageData.original;
 
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(imageUrl);
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError($"Failed to load image for ID {id}: {request.error}");
+            Debug.LogError($"Failed to load image for ID {imageData.original}: {request.error}");
             yield break;
         }
 
         Texture2D texture = DownloadHandlerTexture.GetContent(request);
 
-        // Instantiate prefab
         GameObject newInstance = Instantiate(prefabToCopy, this.transform);
         ShowImage showImage = newInstance.GetComponentInChildren<ShowImage>();
 
         showImage.target = imagePanel;
 
-        // Find Content/Background inside
+        // Store the image data (VERY important step!)
+        ImageInfoHolder holder = newInstance.GetComponent<ImageInfoHolder>();
+        if (holder != null)
+        {
+            holder.imageData = imageData;
+        }
+        else
+        {
+            Debug.LogError("Prefab is missing ImageInfoHolder script!");
+        }
+
         Transform backgroundTransform = newInstance.transform.Find("Content/Background");
 
         if (backgroundTransform != null)
@@ -79,7 +83,6 @@ public class ImagePull : MonoBehaviour
 
             if (targetImage != null && backgroundRectTransform != null)
             {
-                // Create sprite
                 Sprite downloadedSprite = Sprite.Create(
                     texture,
                     new Rect(0, 0, texture.width, texture.height),
@@ -87,11 +90,9 @@ public class ImagePull : MonoBehaviour
                 );
 
                 targetImage.sprite = downloadedSprite;
-
                 targetImage.preserveAspect = true;
                 backgroundRectTransform.sizeDelta = new Vector2(200, 200);
                 backgroundRectTransform.localScale = Vector3.one;
-
             }
             else
             {
@@ -104,33 +105,16 @@ public class ImagePull : MonoBehaviour
         }
     }
 
-
-    // Helper: Parse a raw JSON array like ["id1","id2"]
-    List<string> ParseJsonArray(string json)
+    List<ImageData> ParseJsonArray(string json)
     {
-        List<string> ids = new List<string>();
-
-        json = json.Trim();
-        if (json.StartsWith("[") && json.EndsWith("]"))
+        try
         {
-            json = json.Substring(1, json.Length - 2);
-
-            string[] rawObjects = json.Split(new string[] { "},{" }, StringSplitOptions.None);
-
-            foreach (string raw in rawObjects)
-            {
-                string cleaned = raw.Replace("{", "").Replace("}", "").Replace("\"", "");
-                string[] keyValue = cleaned.Split(':');
-
-                if (keyValue.Length == 2 && keyValue[0].Trim() == "id")
-                {
-                    ids.Add(keyValue[1].Trim());
-                }
-            }
+            return JsonUtilityWrapper.FromJsonArray<ImageData>(json);
         }
-
-        return ids;
+        catch (Exception e)
+        {
+            Debug.LogError("Failed to parse JSON: " + e.Message);
+            return null;
+        }
     }
-
-
 }

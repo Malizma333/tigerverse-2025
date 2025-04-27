@@ -14,8 +14,6 @@ public class ScaleManager : MonoBehaviour
     }
 
     void Update() {
-        Debug.Log(baseTransform);
-        Debug.Log(transform.localScale);
         if (!(baseTransform.x == transform.localScale.x / transform.localScale.z && baseTransform.y == transform.localScale.y / transform.localScale.z)) {
             baseTransform = transform.localScale / transform.localScale.z;
         }
