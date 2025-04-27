@@ -3,6 +3,7 @@ import React, { useState } from "react";
 export default function Home() {
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [submitting, setSubmitting] = useState(false); // New state for submission
   const fileInputId = "image-upload";
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -20,6 +21,8 @@ export default function Home() {
       console.log("No image selected");
       return;
     }
+
+    setSubmitting(true); // Set submitting to true when submission starts
 
     const formData = new FormData();
     formData.append("image", selectedImage);
@@ -59,6 +62,9 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Network or other error during upload:", error);
+    } finally {
+      setSubmitting(false); // Reset submitting to false after submission completes
+      setSelectedImage(null); // Clear the selected image after submission
     }
   };
 
@@ -138,9 +144,11 @@ export default function Home() {
 
           {selectedImage && (
             <>
-              <div className="text-2xl -mt-4 font-extralight text-neutral-700 font-drawing">
-                Selected: {selectedImage.name}
-              </div>
+              {submitting && (
+                <div className="text-2xl -mt-4 font-extralight text-neutral-700 font-drawing">
+                  Selected: {selectedImage.name}
+                </div>
+              )}
               <button
                 className={`
               p-12
@@ -160,10 +168,10 @@ export default function Home() {
               disabled:scale-100
             `}
                 type="submit"
-                disabled={!selectedImage}
+                disabled={!selectedImage || submitting} // Disable when submitting
               >
                 <div className="text-neutral-950 font-drawing text-3xl">
-                  Submit
+                  {submitting ? "Submitting..." : "Submit"} {/* Change text */}
                 </div>
               </button>
             </>
