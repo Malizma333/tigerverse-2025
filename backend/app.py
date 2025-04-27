@@ -33,15 +33,23 @@ def upload_image():
     image_data = file.read()
 
     np_img = np.frombuffer(image_data, np.uint8)
-
     img = cv.imdecode(np_img, cv.IMREAD_GRAYSCALE)
 
-    t_lower = 500
-    t_upper = 600
-    aperture_size = 5
-    edge = cv.Canny(img, t_lower, t_upper, apertureSize=aperture_size)
+    # Stronger noise reduction: bilateral filter instead of Gaussian
+    denoised_img = cv.bilateralFilter(img, d=9, sigmaColor=75, sigmaSpace=75)
 
-    _, buffer = cv.imencode('.jpg', edge)
+    # Stronger edge detection tuning
+    t_lower = 100
+    t_upper = 200
+    aperture_size = 3
+    edges = cv.Canny(denoised_img, t_lower, t_upper, apertureSize=aperture_size)
+
+    # Create a transparent image with yellow edges
+    transparent_bg = np.zeros((edges.shape[0], edges.shape[1], 4), dtype=np.uint8)
+    # Yellow RGBA = (255, 255, 0, 255)
+    transparent_bg[np.where(edges > 0)] = [255, 255, 0, 255]
+
+    _, buffer = cv.imencode('.png', transparent_bg)
 
     processed_image_id = fs.put(buffer.tobytes(), filename=f"processed_{file.filename}")
 
@@ -49,6 +57,7 @@ def upload_image():
         "id": str(original_image_id),
         "processed_id": str(processed_image_id)
     }), 200
+
 
 @app.route('/image/<id>')
 def get_image(id):
