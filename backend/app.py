@@ -34,11 +34,11 @@ def upload_image():
 
     np_img = np.frombuffer(image_data, np.uint8)
 
-    img = cv2.imdecode(np_img, cv2.IMREAD_GRAYSCALE)
+    img = cv.imdecode(np_img, cv.IMREAD_GRAYSCALE)
 
-    edges = cv2.Canny(img, 100, 200)
+    edges = cv.Canny(img, 100, 200)
 
-    _, buffer = cv2.imencode('.jpg', edges)
+    _, buffer = cv.imencode('.jpg', edges)
 
     processed_image_id = fs.put(buffer.tobytes(), filename=f"processed_{file.filename}")
 
