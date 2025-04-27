@@ -52,21 +52,25 @@ def upload_image():
 
     _, buffer_yellow = cv.imencode('.png', transparent_bg_yellow)
 
-    # Combine all images into a single dictionary
-    images = {
-        "original": image_data,
-        "blue_edges": buffer_blue.tobytes(),
-        "yellow_edges": buffer_yellow.tobytes()
+    # Save all images to GridFS
+    original_id = fs.put(image_data, filename=f"original_{file.filename}")
+    blue_edges_id = fs.put(buffer_blue.tobytes(), filename=f"blue_edges_{file.filename}")
+    yellow_edges_id = fs.put(buffer_yellow.tobytes(), filename=f"yellow_edges_{file.filename}")
+
+    # Create a parent document in MongoDB to associate all images
+    parent_document = {
+        "original": str(original_id),
+        "blue_edges": str(blue_edges_id),
+        "yellow_edges": str(yellow_edges_id),
+        "filename": file.filename
     }
-
-    # Serialize the dictionary using pickle
-    serialized_data = pickle.dumps(images)
-
-    # Save the serialized data to GridFS
-    combined_image_id = fs.put(serialized_data, filename=f"combined_{file.filename}")
+    parent_id = db.image_metadata.insert_one(parent_document).inserted_id
 
     return jsonify({
-        "combined_id": str(combined_image_id)
+        "parent_id": str(parent_id),
+        "original_id": str(original_id),
+        "blue_edges_id": str(blue_edges_id),
+        "yellow_edges_id": str(yellow_edges_id)
     }), 200
 
 
@@ -80,17 +84,30 @@ def get_image(id):
 
 @app.route('/image/latest')
 def get_latest_image():
-    latest = db.fs.files.find().sort('uploadDate', DESCENDING).limit(1)
-    latest_file = next(latest, None)
-    if not latest_file:
-        return 'No images found', 404
+    latest = db.image_metadata.find().sort('_id', DESCENDING).limit(1)
+    latest_doc = next(latest, None)
+    if not latest_doc:
+        return jsonify({'error': 'No images found'}), 404
 
-    image_id = latest_file['_id']
-    file = fs.get(image_id)
-    return Response(file.read(), mimetype='image/jpeg')
+    return jsonify({
+        "parent_id": str(latest_doc["_id"]),
+        "filename": latest_doc.get("filename", ""),
+        "original": latest_doc.get("original", ""),
+        "detailed": latest_doc.get("blue_edges", ""),
+        "textured": latest_doc.get("yellow_edges", "")
+    }), 200
+
 
 @app.route('/images')
 def list_images():
-    files = db.fs.files.find().sort('uploadDate', DESCENDING)
-    image_list = [{"id": str(f["_id"])} for f in files]
+    files = db.image_metadata.find().sort('_id', DESCENDING)
+    image_list = []
+    for f in files:
+        image_list.append({
+            "parent_id": str(f["_id"]),
+            "filename": f.get("filename", ""),
+            "original": f.get("original", ""),
+            "detailed": f.get("blue_edges", ""),
+            "textured": f.get("yellow_edges", "")
+        })
     return jsonify(image_list)
