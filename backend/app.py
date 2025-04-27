@@ -34,37 +34,56 @@ def upload_image():
     np_img = np.frombuffer(image_data, np.uint8)
     img = cv.imdecode(np_img, cv.IMREAD_GRAYSCALE)
 
-    # Logic 1: Blue edges with transparent background
+    if img is None:
+        return 'Could not decode image', 400
+
     denoised_img = cv.bilateralFilter(img, d=9, sigmaColor=75, sigmaSpace=75)
-    t_lower = 100
-    t_upper = 200
-    aperture_size = 3
-    edges = cv.Canny(denoised_img, t_lower, t_upper, apertureSize=aperture_size)
 
-    transparent_bg_blue = np.zeros((edges.shape[0], edges.shape[1], 4), dtype=np.uint8)
-    transparent_bg_blue[np.where(edges > 0)] = [0, 0, 255, 255]  # Blue RGBA
+    # Logic 1: Blue edges
+    t_lower1 = 400
+    t_upper1 = 500
+    aperture_size1 = 3
+    edges1 = cv.Canny(denoised_img, t_lower1, t_upper1, apertureSize=aperture_size1)
 
-    _, buffer_blue = cv.imencode('.png', transparent_bg_blue)
+    transparent_bg_blue = np.zeros((edges1.shape[0], edges1.shape[1], 4), dtype=np.uint8)
+    transparent_bg_blue[np.where(edges1 > 0)] = [0, 255, 0, 255] # Blue RGBA
 
-    # Logic 2: Yellow edges with transparent background
-    transparent_bg_yellow = np.zeros((edges.shape[0], edges.shape[1], 4), dtype=np.uint8)
-    transparent_bg_yellow[np.where(edges > 0)] = [255, 255, 0, 255]  # Yellow RGBA
+    success_blue, buffer_blue = cv.imencode('.png', transparent_bg_blue)
+    if not success_blue:
+        return 'Failed to encode blue edge image', 500
 
-    _, buffer_yellow = cv.imencode('.png', transparent_bg_yellow)
+    # Logic 2: Yellow edges
+    t_lower2 = 50
+    t_upper2 = 150
+    aperture_size2 = 5
+    edges2 = cv.Canny(denoised_img, t_lower2, t_upper2, apertureSize=aperture_size2)
+
+    transparent_bg_yellow = np.zeros((edges2.shape[0], edges2.shape[1], 4), dtype=np.uint8)
+    transparent_bg_yellow[np.where(edges2 > 0)] = [255, 255, 0, 255] # Yellow RGBA
+
+    success_yellow, buffer_yellow = cv.imencode('.png', transparent_bg_yellow)
+    if not success_yellow:
+        return 'Failed to encode yellow edge image', 500
 
     # Save all images to GridFS
     original_id = fs.put(image_data, filename=f"original_{file.filename}")
-    blue_edges_id = fs.put(buffer_blue.tobytes(), filename=f"blue_edges_{file.filename}")
-    yellow_edges_id = fs.put(buffer_yellow.tobytes(), filename=f"yellow_edges_{file.filename}")
+    blue_edges_id = fs.put(buffer_blue.tobytes(), filename=f"blue_edges_{file.filename}.png")
+    yellow_edges_id = fs.put(buffer_yellow.tobytes(), filename=f"yellow_edges_{file.filename}.png")
 
-    # Create a parent document in MongoDB to associate all images
+    # Create a parent document in MongoDB
     parent_document = {
         "original": str(original_id),
         "blue_edges": str(blue_edges_id),
         "yellow_edges": str(yellow_edges_id),
         "filename": file.filename
     }
-    parent_id = db.image_metadata.insert_one(parent_document).inserted_id
+    try:
+        parent_id = db.image_metadata.insert_one(parent_document).inserted_id
+    except Exception as e:
+        fs.delete(original_id)
+        fs.delete(blue_edges_id)
+        fs.delete(yellow_edges_id)
+        return f"Failed to insert metadata into MongoDB: {e}", 500
 
     return jsonify({
         "parent_id": str(parent_id),
