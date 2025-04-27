@@ -21,7 +21,7 @@ public class ScaleManager : MonoBehaviour
     public void UpdateScale(float value)
     {
         // Maintain the aspect ratio by setting the same scale for all axes
-        curScale = Mathf.Lerp(minScale, maxScale, value);
+        curScale = Mathf.Clamp(value, minScale, maxScale);
 
         // Update the object's scale, preserving the aspect ratio
         transform.localScale = baseTransform * curScale;
