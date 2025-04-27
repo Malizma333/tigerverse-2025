@@ -38,7 +38,7 @@ def upload_image():
 
     L2Gradient = True
 
-    edges = cv.Canny(img, 50, 150, L2gradient = L2Gradient)
+    edges = cv.Canny(img, 100, 120, L2gradient = L2Gradient)
 
     _, buffer = cv.imencode('.jpg', edges)
 
