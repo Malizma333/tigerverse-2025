@@ -176,7 +176,7 @@ export default function Gallery() {
                   <motion.div
                     key={imgInfo.parent_id}
                     variants={itemVariants}
-                    className="bg-neutral-100 rounded-lg overflow-hidden flex flex-col items-center p-2 shadow-md hover:shadow-lg transition-shadow duration-200"
+                    className="bg-neutral-950 rounded-lg overflow-hidden flex flex-col items-center p-2 shadow-md hover:shadow-lg transition-shadow duration-200"
                   >
                     <img
                       src={`${API_BASE_URL}/image/${imgInfo.original}`}
