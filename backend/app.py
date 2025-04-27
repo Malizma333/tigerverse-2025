@@ -27,32 +27,30 @@ def upload_image():
     if file.filename == '':
         return 'No selected file', 400
 
-    # Save the original image to GridFS
     original_image_id = fs.put(file, filename=file.filename)
 
-    # Reset the file stream to read the image again
     file.stream.seek(0)
     image_data = file.read()
 
-    # Convert the image data to a NumPy array
     np_img = np.frombuffer(image_data, np.uint8)
 
-    # Decode the image (assuming it's in JPEG format)
     img = cv.imdecode(np_img, cv.IMREAD_GRAYSCALE)
 
-    # Apply Gaussian blur to reduce noise
     blurred_img = cv.GaussianBlur(img, (5, 5), 0)
 
-    # Apply Canny edge detection
     t_lower = 500
     t_upper = 600
     aperture_size = 5
     edges = cv.Canny(blurred_img, t_lower, t_upper, apertureSize=aperture_size)
 
-    # Encode the processed image back to JPEG format
-    _, buffer = cv.imencode('.jpg', edges)
+    white_bg = np.ones_like(edges) * 255
 
-    # Save the processed image to GridFS
+    edges_colored = cv.cvtColor(white_bg, cv.COLOR_GRAY2BGR)
+
+    edges_colored[np.where(edges > 0)] = [0, 255, 255]
+
+    _, buffer = cv.imencode('.jpg', edges_colored)
+
     processed_image_id = fs.put(buffer.tobytes(), filename=f"processed_{file.filename}")
 
     return jsonify({
