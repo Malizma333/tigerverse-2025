@@ -1,10 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI; // Needed for Image
+using UnityEngine.UI;
 
 public class ShowImage : MonoBehaviour
 {
-    public GameObject imgSource; // This is your UI Image source
-    public Renderer target; // This is your Quad's Renderer (e.g., MeshRenderer)
+    public GameObject imgSource; // UI Image source
+    public Renderer target;      // Quad's Renderer
 
     public void OnValueChanged(bool isOn)
     {
@@ -20,6 +20,31 @@ public class ShowImage : MonoBehaviour
 
                 // Apply it to the Quad's material
                 target.material.mainTexture = texture;
+
+                // Resize the quad to match the sprite's aspect ratio
+                float width = sourceImage.sprite.rect.width;
+                float height = sourceImage.sprite.rect.height;
+                float aspect = width / height;
+
+                Vector3 originalScale = target.transform.localScale;
+                float baseScale = Mathf.Min(originalScale.x, originalScale.y);
+
+                Vector3 newScale = originalScale;
+
+                if (aspect >= 1f)
+                {
+                    // Wider than tall
+                    newScale.x = baseScale;
+                    newScale.y = baseScale / aspect;
+                }
+                else
+                {
+                    // Taller than wide
+                    newScale.y = baseScale;
+                    newScale.x = baseScale * aspect;
+                }
+
+                target.transform.localScale = newScale;
             }
             else
             {
@@ -32,7 +57,6 @@ public class ShowImage : MonoBehaviour
     {
         if (sprite.rect.width != sprite.texture.width || sprite.rect.height != sprite.texture.height)
         {
-            // If the sprite is a part of an atlas, crop it
             Texture2D croppedTexture = new Texture2D((int)sprite.rect.width, (int)sprite.rect.height);
             Color[] pixels = sprite.texture.GetPixels(
                 (int)sprite.textureRect.x,
@@ -45,7 +69,6 @@ public class ShowImage : MonoBehaviour
         }
         else
         {
-            // If the sprite covers the full texture
             return sprite.texture;
         }
     }
