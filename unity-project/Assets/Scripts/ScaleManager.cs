@@ -6,7 +6,7 @@ public class ScaleManager : MonoBehaviour
 
     // Minimum and maximum values for the slider (scale range)
     public float minScale = 0.25f;
-    public float maxScale = 4f;
+    public float maxScale = 16f;
     public float curScale = 1f;
 
     void Awake() {
@@ -15,6 +15,7 @@ public class ScaleManager : MonoBehaviour
 
     public void ReassignAspectRatio(Vector3 newBase) {
         baseTransform = newBase;
+        transform.localScale = baseTransform * curScale;
     }
 
     // Event function to change scale based on the slider value
