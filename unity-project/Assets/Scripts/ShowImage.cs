@@ -1,5 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+using System.Collections;
+using System.Collections.Generic;
+using System;
 
 public class ShowImage : MonoBehaviour
 {
@@ -17,6 +21,31 @@ public class ShowImage : MonoBehaviour
             {
                 Texture2D texture = SpriteToTexture2D(sourceImage.sprite);
                 target.material.mainTexture = texture;
+                ImageInfoHolder curr = imgSource.GetComponent<ImageInfoHolder>();
+
+                if (curr != null)
+                {
+                    Transform detailedChild = target.transform.Find("Detailed");
+                    Transform texturedChild = target.transform.Find("Textured");
+
+                    if (detailedChild != null)
+                    {
+                        Renderer detailedRenderer = detailedChild.GetComponent<Renderer>();
+                        if (detailedRenderer != null)
+                        {
+                            StartCoroutine(DownloadAndSetTexture(curr.imageData.detailed, detailedRenderer));
+                        }
+                    }
+
+                    if (texturedChild != null)
+                    {
+                        Renderer texturedRenderer = texturedChild.GetComponent<Renderer>();
+                        if (texturedRenderer != null)
+                        {
+                            StartCoroutine(DownloadAndSetTexture(curr.imageData.textured, texturedRenderer));
+                        }
+                    }
+                }
 
                 float width = sourceImage.sprite.rect.width;
                 float height = sourceImage.sprite.rect.height;
@@ -44,6 +73,29 @@ public class ShowImage : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator DownloadAndSetTexture(string id, Renderer rendererTarget)
+    {
+        if (string.IsNullOrEmpty(id))
+        {
+            Debug.LogWarning("Missing ID for detailed or textured image.");
+            yield break;
+        }
+
+        string url = $"https://tigerverse-2025.onrender.com/image/{id}";
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("Failed to download image: " + request.error);
+            yield break;
+        }
+
+        Texture2D texture = DownloadHandlerTexture.GetContent(request);
+        rendererTarget.material.mainTexture = texture;
+    }
+
 
     private Texture2D SpriteToTexture2D(Sprite sprite)
     {

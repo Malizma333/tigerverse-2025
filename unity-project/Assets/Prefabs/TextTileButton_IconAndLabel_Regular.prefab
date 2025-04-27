@@ -67,6 +67,7 @@ GameObject:
   - component: {fileID: 7759946760299174391}
   - component: {fileID: 3320956413595262213}
   - component: {fileID: 4560099414510997694}
+  - component: {fileID: 5407147134428697983}
   m_Layer: 0
   m_Name: TextTileButton_IconAndLabel_Regular
   m_TagString: QDSUIToggleButton
@@ -177,6 +178,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5407147134428697983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5197642335708490856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93763ed80493a8443a0ae4c42922b11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageData:
+    original_id: 
+    detailed_id: 
+    textured_id: 
 --- !u!1 &5993214964360580244
 GameObject:
   m_ObjectHideFlags: 0
