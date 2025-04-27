@@ -90,7 +90,7 @@ export default function Home() {
       ></div>
       <div className="w-full z-20 flex items-center justify-between flex-col md:flex-row">
         <div className="text-neutral-900 font-bold py-4 w-full flex flex-col justify-center items-center gap-10">
-          <img className="w-100" src="logo.svg"></img>
+          <object className="w-100" data="logo.svg" type="image/svg+xml" />
           <div className="font-drawing text-7xl text-center leading-20">
             Make the world <br></br>
             <span className="text-pink-400 relative mr-12">
