@@ -36,11 +36,12 @@ def upload_image():
 
     img = cv.imdecode(np_img, cv.IMREAD_GRAYSCALE)
 
-    L2Gradient = True
+    t_lower = 100  
+    t_upper = 200  
+    aperture_size = 5 
+    edge = cv.Canny(img, t_lower, t_upper, apertureSize=aperture_size)
 
-    edges = cv.Canny(img, 100, 120, L2gradient = L2Gradient)
-
-    _, buffer = cv.imencode('.jpg', edges)
+    _, buffer = cv.imencode('.jpg', edge)
 
     processed_image_id = fs.put(buffer.tobytes(), filename=f"processed_{file.filename}")
 
