@@ -36,7 +36,7 @@ def upload_image():
 
     img = cv.imdecode(np_img, cv.IMREAD_GRAYSCALE)
 
-    edges = cv.Canny(img, 100, 200)
+    edges = cv.Canny(img, 100, 150)
 
     _, buffer = cv.imencode('.jpg', edges)
 
