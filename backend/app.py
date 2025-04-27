@@ -47,6 +47,11 @@ def upload_image():
     _, buffer_blue = cv.imencode('.png', transparent_bg_blue)
 
     # Logic 2: Yellow edges with transparent background
+    aperture_size = 5
+    t_lower = 500
+    t_upper = 600
+    edges = cv.Canny(denoised_img, t_lower, t_upper, apertureSize=aperture_size)
+
     transparent_bg_yellow = np.zeros((edges.shape[0], edges.shape[1], 4), dtype=np.uint8)
     transparent_bg_yellow[np.where(edges > 0)] = [255, 255, 0, 255]  # Yellow RGBA
 

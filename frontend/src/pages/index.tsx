@@ -43,11 +43,11 @@ export default function Home() {
         if (contentType && contentType.includes("application/json")) {
           const data = await response.json();
           console.log("Upload success:", data);
-          toast.success("Image uploaded successfully!"); // Toastify success notification
+          toast.success("Submitted!"); // Toastify success notification
         } else {
           const text = await response.text();
           console.log("Upload success (non-JSON response):", text);
-          toast.success("Image uploaded successfully!"); // Toastify success notification
+          toast.success("Submitted!"); // Toastify success notification
         }
       } else {
         if (contentType && contentType.includes("application/json")) {
