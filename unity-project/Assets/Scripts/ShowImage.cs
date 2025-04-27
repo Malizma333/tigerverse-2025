@@ -26,6 +26,7 @@ public class ShowImage : MonoBehaviour
 
                 if (scaleParent != null && curr != null)
                 {
+                    
                     Transform originalChild = scaleParent.Find("Original");
                     Transform detailedChild = scaleParent.Find("Detailed");
                     Transform texturedChild = scaleParent.Find("Textured");
@@ -79,7 +80,13 @@ public class ShowImage : MonoBehaviour
                     newScale.x = original * aspect;
                 }
 
-                target.transform.localScale = newScale * target.transform.localScale.z;
+                ScaleManager scaleManager = scaleParent.GetComponent<ScaleManager>();
+
+                if (scaleManager != null) {
+                    scaleManager.ReassignAspectRatio(newScale);
+                }
+
+                scaleParent.localScale = newScale * scaleParent.localScale.z;
             }
             else
             {

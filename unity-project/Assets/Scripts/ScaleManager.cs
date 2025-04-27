@@ -13,10 +13,8 @@ public class ScaleManager : MonoBehaviour
         baseTransform = transform.localScale;
     }
 
-    void Update() {
-        if (!(baseTransform.x == transform.localScale.x / transform.localScale.z && baseTransform.y == transform.localScale.y / transform.localScale.z)) {
-            baseTransform = transform.localScale / transform.localScale.z;
-        }
+    public void ReassignAspectRatio(Vector3 newBase) {
+        baseTransform = newBase;
     }
 
     // Event function to change scale based on the slider value
