@@ -84,17 +84,30 @@ def get_image(id):
 
 @app.route('/image/latest')
 def get_latest_image():
-    latest = db.fs.files.find().sort('uploadDate', DESCENDING).limit(1)
-    latest_file = next(latest, None)
-    if not latest_file:
-        return 'No images found', 404
+    latest = db.image_metadata.find().sort('_id', DESCENDING).limit(1)
+    latest_doc = next(latest, None)
+    if not latest_doc:
+        return jsonify({'error': 'No images found'}), 404
 
-    image_id = latest_file['_id']
-    file = fs.get(image_id)
-    return Response(file.read(), mimetype='image/jpeg')
+    return jsonify({
+        "parent_id": str(latest_doc["_id"]),
+        "filename": latest_doc.get("filename", ""),
+        "original": latest_doc.get("original", ""),
+        "detailed": latest_doc.get("blue_edges", ""),
+        "textured": latest_doc.get("yellow_edges", "")
+    }), 200
+
 
 @app.route('/images')
 def list_images():
-    files = db.fs.files.find().sort('uploadDate', DESCENDING)
-    image_list = [{"id": str(f["_id"])} for f in files]
+    files = db.image_metadata.find().sort('_id', DESCENDING)
+    image_list = []
+    for f in files:
+        image_list.append({
+            "parent_id": str(f["_id"]),
+            "filename": f.get("filename", ""),
+            "original": f.get("original", ""),
+            "detailed": f.get("blue_edges", ""),
+            "textured": f.get("yellow_edges", "")
+        })
     return jsonify(image_list)
