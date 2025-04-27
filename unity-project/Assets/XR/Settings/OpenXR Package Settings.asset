@@ -215,7 +215,12 @@ MonoBehaviour:
   - {fileID: 6649822544614566083}
   - {fileID: -1940598303147817705}
   - {fileID: 6501721134763958433}
+  - {fileID: 3217227069914889667}
   - {fileID: 6554507985157104342}
+  - {fileID: 1693610602873834915}
+  - {fileID: -7968505535451909957}
+  - {fileID: 2961182363715595719}
+  - {fileID: -5938712837406334575}
   - {fileID: -6613069851685069498}
   - {fileID: 312829472658702504}
   - {fileID: -6981653059187274939}
@@ -223,8 +228,14 @@ MonoBehaviour:
   - {fileID: -1401138839857896749}
   - {fileID: -1089426850744320282}
   - {fileID: 4175041349310896728}
+  - {fileID: -4107301283057514483}
   m_renderMode: 1
+  m_autoColorSubmissionMode: 1
+  m_colorSubmissionModes:
+    m_List: 00000000
   m_depthSubmissionMode: 0
+  m_spacewarpMotionVectorTextureFormat: 0
+  m_optimizeBufferDiscards: 0
   m_symmetricProjection: 0
 --- !u!114 &-6981653059187274939
 MonoBehaviour:
@@ -565,15 +576,27 @@ MonoBehaviour:
   - {fileID: 9018634186613209964}
   - {fileID: -8156887419036336894}
   - {fileID: 2376241714000099131}
+  - {fileID: -7758808462018209504}
   - {fileID: 2334402978593528146}
+  - {fileID: -2349184619202380907}
+  - {fileID: -8253555285808769406}
+  - {fileID: -4781665308928894408}
+  - {fileID: -2961855652413457184}
+  - {fileID: -933812920252030038}
   - {fileID: 5757905214511935174}
   - {fileID: 5047856783925176523}
   - {fileID: -8231889316538817135}
   - {fileID: -8946449740989887078}
   - {fileID: 7014149151431622365}
   - {fileID: -5103840888656937856}
+  - {fileID: -35144709423512694}
   m_renderMode: 1
+  m_autoColorSubmissionMode: 1
+  m_colorSubmissionModes:
+    m_List: 00000000
   m_depthSubmissionMode: 0
+  m_spacewarpMotionVectorTextureFormat: 0
+  m_optimizeBufferDiscards: 0
   m_symmetricProjection: 0
 --- !u!114 &-933812920252030038
 MonoBehaviour:
@@ -704,7 +727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4b862ee14fb479fbfe5fffe655d3ed3, type: 3}
   m_Name: MetaQuestTouchProControllerProfile Android
   m_EditorClassIdentifier: 
-  m_enabled: 1
+  m_enabled: 0
   nameUi: Meta Quest Touch Pro Controller Profile
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.metaquestpro
@@ -750,9 +773,13 @@ MonoBehaviour:
     enabled: 1
   forceRemoveInternetPermission: 0
   symmetricProjection: 0
+  foveatedRenderingApi: 0
   systemSplashScreen: {fileID: 0}
+  optimizeBufferDiscards: 1
   lateLatchingMode: 0
   lateLatchingDebug: 0
+  optimizeMultiviewRenderRegions: 0
+  spacewarpMotionVectorTextureFormat: 0
 --- !u!114 &2925535857155720476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -946,7 +973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4b862ee14fb479fbfe5fffe655d3ed3, type: 3}
   m_Name: MetaQuestTouchProControllerProfile Standalone
   m_EditorClassIdentifier: 
-  m_enabled: 1
+  m_enabled: 0
   nameUi: Meta Quest Touch Pro Controller Profile
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.metaquestpro
