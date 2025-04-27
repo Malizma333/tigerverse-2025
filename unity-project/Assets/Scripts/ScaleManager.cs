@@ -15,6 +15,7 @@ public class ScaleManager : MonoBehaviour
 
     public void ReassignAspectRatio(Vector3 newBase) {
         baseTransform = newBase;
+        transform.localScale = baseTransform * curScale;
     }
 
     // Event function to change scale based on the slider value

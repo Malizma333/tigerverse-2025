@@ -17,7 +17,6 @@ public class ShowImage : MonoBehaviour
         if (imgSource != null && target != null)
         {
             Image sourceImage = imgSource.GetComponent<Image>();
-            Debug.Log(sourceImage);
             if (sourceImage != null && sourceImage.sprite != null)
             {
                 Texture2D texture = SpriteToTexture2D(sourceImage.sprite);
@@ -30,9 +29,6 @@ public class ShowImage : MonoBehaviour
                     Transform originalChild = scaleParent.Find("Original");
                     Transform detailedChild = scaleParent.Find("Detailed");
                     Transform texturedChild = scaleParent.Find("Textured");
-
-                    Debug.Log(originalChild);
-                    Debug.Log(detailedChild);
 
                     if (originalChild != null)
                     {
@@ -85,8 +81,6 @@ public class ShowImage : MonoBehaviour
                 if (scaleManager != null) {
                     scaleManager.ReassignAspectRatio(newScale);
                 }
-
-                scaleParent.localScale = newScale * scaleParent.localScale.z;
             }
             else
             {
