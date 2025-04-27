@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [submitting, setSubmitting] = useState(false); // New state for submission
+  const [submitting, setSubmitting] = useState(false);
   const fileInputId = "image-upload";
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -22,7 +24,7 @@ export default function Home() {
       return;
     }
 
-    setSubmitting(true); // Set submitting to true when submission starts
+    setSubmitting(true);
 
     const formData = new FormData();
     formData.append("image", selectedImage);
@@ -41,11 +43,11 @@ export default function Home() {
         if (contentType && contentType.includes("application/json")) {
           const data = await response.json();
           console.log("Upload success:", data);
-          alert("Uploaded image successfully.");
+          toast.success("Image uploaded successfully!"); // Toastify success notification
         } else {
           const text = await response.text();
           console.log("Upload success (non-JSON response):", text);
-          alert("Uploaded image successfully.");
+          toast.success("Image uploaded successfully!"); // Toastify success notification
         }
       } else {
         if (contentType && contentType.includes("application/json")) {
@@ -55,13 +57,16 @@ export default function Home() {
             response.status,
             errorData
           );
+          toast.error("Failed to upload image."); // Toastify error notification
         } else {
           const errorText = await response.text();
           console.error("Upload failed:", response.status, errorText);
+          toast.error("Failed to upload image."); // Toastify error notification
         }
       }
     } catch (error) {
       console.error("Network or other error during upload:", error);
+      toast.error("An error occurred during upload."); // Toastify error notification
     } finally {
       setSubmitting(false);
       setSelectedImage(null);
@@ -73,6 +78,7 @@ export default function Home() {
       className="bg-white relative w-full min-h-screen flex justify-center items-center px-8 overflow-hidden"
       onMouseMove={handleMouseMove}
     >
+      <ToastContainer /> {/* Toastify container */}
       <img
         src="bg-art/amongus.svg"
         alt=""
