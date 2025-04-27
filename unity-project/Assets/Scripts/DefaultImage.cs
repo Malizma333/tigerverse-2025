@@ -15,7 +15,10 @@ public class ImageData
 
 public class DefaultImage : MonoBehaviour
 {
-    public Renderer target;
+    public Renderer original_r;
+    public Renderer detailed_r;
+    public Renderer textured_r;
+
     private string imageListUrl = "https://tigerverse-2025.onrender.com/images";
     private string imageFetchUrlBase = "https://tigerverse-2025.onrender.com/image/";
 
@@ -71,32 +74,13 @@ public class DefaultImage : MonoBehaviour
 
         // Download the original image
         string originalUrl = imageFetchUrlBase + latestImage.original;
-        Debug.Log(originalUrl);
-        yield return StartCoroutine(DownloadAndDisplayImage(originalUrl, target));
+        StartCoroutine(DownloadAndDisplayImage(originalUrl, original_r));
 
-        // Now preload and assign Detailed and Textured
-        Transform detailedChild = transform.Find("Detailed");
-        Transform texturedChild = transform.Find("Textured");
-
-        if (detailedChild != null && !string.IsNullOrEmpty(latestImage.detailed))
-        {
-            Renderer detailedRenderer = detailedChild.GetComponent<Renderer>();
-            if (detailedRenderer != null)
-            {
-                string detailedUrl = imageFetchUrlBase + latestImage.detailed;
-                StartCoroutine(DownloadAndDisplayImage(detailedUrl, detailedRenderer));
-            }
-        }
-
-        if (texturedChild != null && !string.IsNullOrEmpty(latestImage.textured))
-        {
-            Renderer texturedRenderer = texturedChild.GetComponent<Renderer>();
-            if (texturedRenderer != null)
-            {
-                string texturedUrl = imageFetchUrlBase + latestImage.textured;
-                StartCoroutine(DownloadAndDisplayImage(texturedUrl, texturedRenderer));
-            }
-        }
+        string detailedUrl = imageFetchUrlBase + latestImage.detailed;
+        StartCoroutine(DownloadAndDisplayImage(detailedUrl, detailed_r));
+    
+        string texturedUrl = imageFetchUrlBase + latestImage.textured;
+        StartCoroutine(DownloadAndDisplayImage(texturedUrl, textured_r));
     }
 
     private IEnumerator DownloadAndDisplayImage(string url, Renderer rendererTarget)

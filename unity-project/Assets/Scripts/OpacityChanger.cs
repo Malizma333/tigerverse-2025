@@ -2,13 +2,11 @@ using UnityEngine;
 
 public class OpacityChanger : MonoBehaviour
 {
-    private Renderer cubeRenderer;
-    private Material cubeMaterial;
+    public Renderer cubeRenderer;
 
     private void Awake()
     {
-        cubeRenderer = GetComponent<Renderer>();
-        cubeMaterial = cubeRenderer.material;
+        Material cubeMaterial = cubeRenderer.material;
 
         // Make sure the shader supports transparency
         cubeMaterial.SetFloat("_Mode", 3); // 3 = Transparent for Standard shader
@@ -23,6 +21,8 @@ public class OpacityChanger : MonoBehaviour
 
     public void SetOpacity(float value)
     {
+        Material cubeMaterial = cubeRenderer.material;
+
         if (cubeMaterial != null)
         {
             Color color = cubeMaterial.color;

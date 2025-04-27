@@ -9,7 +9,7 @@ public class ScaleManager : MonoBehaviour
     public float maxScale = 4f;
     public float curScale = 1f;
 
-    void Start() {
+    void Awake() {
         baseTransform = transform.localScale;
     }
 
