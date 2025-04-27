@@ -87,7 +87,7 @@ export default function Gallery() {
       ></div>
       <a
         href="/"
-        className="fixed bottom-0 right-0 flex justify-center items-center m-12 z-100 hover:scale-105 "
+        className="fixed bottom-0 right-0 flex justify-center items-center m-12 z-100 hover:scale-105 transition-all duration-100"
       >
         <div
           className={`
