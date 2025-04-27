@@ -1,20 +1,26 @@
+# ARtist
+
 ## Inspiration
-We all have a common frustration of translating a mental or reference image accurately onto a physical surface. This is where ARtist utilizes the power of AR to overlay a perfectly scalable digital guide directly onto any real-world canvas to bridge the gap between vision and execution. Our goal is to inspire anyone to confidently bring their ideas to life and experience the joy of creation by making the process intuitive and accessible.
+We all share the frustration of trying to translate a mental or reference image onto a physical surface. **ARtist** uses the power of AR to overlay a perfectly scalable digital guide onto any real-world canvas, bridging the gap between vision and execution. Our goal is to inspire anyone to confidently bring their ideas to life and experience the joy of creation by making the process intuitive and accessible.
 
-## What it does
-ARtist acts as a digital stencil, allowing users to select any image and project it virtually onto a real-world surface like a wall, canvas, or piece of paper. Users can freely scale the projected image to their desired size and position it precisely where they want to draw. By looking through their VR headset, they see the image overlaid on their chosen surface, providing a clear guide to trace, making the process of transferring complex shapes and proportions significantly easier for anyone.
+## What It Does
+**ARtist** acts as a digital stencil, allowing users to select any image and project it virtually onto a surface like a wall, canvas, or piece of paper. Users can freely scale and position the projected image. By looking through a VR headset, they see the image overlaid on their chosen surface, providing a clear guide to trace—making it significantly easier to transfer complex shapes and proportions.
 
-## How we built it
-We built the frontend of ARtist on top of Next.js using TypeScript. The backend was created using Flask, GridFS, and MongoDB to handle image metadata and files. We used OpenCV for image processing tasks such as edge detection and filtering with algorithms such as Canny. We used Unity to build the scenes and C# for scripting and connecting the backend to Unity. 
+## How We Built It
+- **Frontend**: Built with Next.js and TypeScript
+- **Backend**: Built with Flask, using GridFS and MongoDB to handle image metadata and storage
+- **Image Processing**: OpenCV for edge detection and filtering (e.g., Canny algorithm)
+- **AR/VR Development**: Unity for scene building and C# for scripting and backend integration
 
-## Challenges we ran into
-The initial hurtle of setting up and testing the Unity scenes with the Meta Quest 3 was a huge pain as many times, the Quest Link application itself would take ages to load and just not work in general. We spent around 10 hours troubleshooting errors, we even went the length to go purchase a new laptop to make sure that it wasn’t a hardware issue. Eventually we figured out that the Quest Link application has some compatibility issues with Windows 11 and you must update to the latest version for everything to work correctly and that it’s working correctly if the Quest Link boots within 5-10 seconds. 
+## Challenges We Ran Into
+Setting up and testing Unity scenes with the Meta Quest 3 was extremely challenging. Quest Link often failed to load, wasting countless hours. After almost 10 hours of troubleshooting (and even buying a new laptop), we discovered that Quest Link has compatibility issues with Windows 11 and requires the latest updates. A successful setup is indicated when Quest Link boots within 5–10 seconds.
 
-## Accomplishments that we're proud of
-While we spent 10 hours troubleshooting, a member set out on a journey to collect as many doodles as possible from all of the hackers. 
+## Accomplishments We're Proud Of
+Despite the technical hurdles, one team member set out to collect as many doodles as possible from hackers at the event—capturing the spirit of creativity that ARtist is all about.
 
-## What we learned
-We learned how to build an AR app from scratch in Unity for the Meta Quest 3 and integrate a web app with it.
+## What We Learned
+- How to build an AR app from scratch in Unity for the Meta Quest 3
+- How to integrate a web app backend with Unity
 
-## What's next for ARtist
-We want to expand this further into a collaborative space so multiple people can work on the same piece of art simultaneously. Also, we want users to be able to snap art directly onto surfaces.
+## What's Next for ARtist
+We want to expand ARtist into a collaborative space where multiple people can work on the same piece of art simultaneously. We also want to add the ability for users to snap art directly onto surfaces for better alignment.
