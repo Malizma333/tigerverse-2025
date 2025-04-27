@@ -7,6 +7,7 @@ from flask_cors import CORS
 from bson import ObjectId
 import cv2 as cv
 import numpy as np
+import pickle  # Import pickle for serialization
 
 load_dotenv()
 
@@ -27,28 +28,47 @@ def upload_image():
     if file.filename == '':
         return 'No selected file', 400
 
-    original_image_id = fs.put(file, filename=file.filename)
-
     file.stream.seek(0)
     image_data = file.read()
 
     np_img = np.frombuffer(image_data, np.uint8)
-
     img = cv.imdecode(np_img, cv.IMREAD_GRAYSCALE)
 
-    t_lower = 100  
-    t_upper = 200  
+    # Logic 1: Blue edges with transparent background
+    denoised_img = cv.bilateralFilter(img, d=9, sigmaColor=75, sigmaSpace=75)
+    t_lower = 100
+    t_upper = 200
     aperture_size = 3
-    edge = cv.Canny(img, t_lower, t_upper, apertureSize=aperture_size)
+    edges = cv.Canny(denoised_img, t_lower, t_upper, apertureSize=aperture_size)
 
-    _, buffer = cv.imencode('.jpg', edge)
+    transparent_bg_blue = np.zeros((edges.shape[0], edges.shape[1], 4), dtype=np.uint8)
+    transparent_bg_blue[np.where(edges > 0)] = [0, 0, 255, 255]  # Blue RGBA
 
-    processed_image_id = fs.put(buffer.tobytes(), filename=f"processed_{file.filename}")
+    _, buffer_blue = cv.imencode('.png', transparent_bg_blue)
+
+    # Logic 2: Yellow edges with transparent background
+    transparent_bg_yellow = np.zeros((edges.shape[0], edges.shape[1], 4), dtype=np.uint8)
+    transparent_bg_yellow[np.where(edges > 0)] = [255, 255, 0, 255]  # Yellow RGBA
+
+    _, buffer_yellow = cv.imencode('.png', transparent_bg_yellow)
+
+    # Combine all images into a single dictionary
+    images = {
+        "original": image_data,
+        "blue_edges": buffer_blue.tobytes(),
+        "yellow_edges": buffer_yellow.tobytes()
+    }
+
+    # Serialize the dictionary using pickle
+    serialized_data = pickle.dumps(images)
+
+    # Save the serialized data to GridFS
+    combined_image_id = fs.put(serialized_data, filename=f"combined_{file.filename}")
 
     return jsonify({
-        "id": str(original_image_id),
-        "processed_id": str(processed_image_id)
+        "combined_id": str(combined_image_id)
     }), 200
+
 
 @app.route('/image/<id>')
 def get_image(id):
