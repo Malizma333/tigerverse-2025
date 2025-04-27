@@ -43,13 +43,11 @@ def upload_image():
     aperture_size = 5
     edges = cv.Canny(blurred_img, t_lower, t_upper, apertureSize=aperture_size)
 
-    white_bg = np.ones_like(edges) * 255
+    transparent_bg = np.zeros((edges.shape[0], edges.shape[1], 4), dtype=np.uint8)
 
-    edges_colored = cv.cvtColor(white_bg, cv.COLOR_GRAY2BGR)
+    transparent_bg[np.where(edges > 0)] = [0, 153, 153, 255]  # Darker yellow (BGR: 0, 153, 153) with full opacity
 
-    edges_colored[np.where(edges > 0)] = [0, 255, 255]
-
-    _, buffer = cv.imencode('.jpg', edges_colored)
+    _, buffer = cv.imencode('.png', transparent_bg)
 
     processed_image_id = fs.put(buffer.tobytes(), filename=f"processed_{file.filename}")
 
