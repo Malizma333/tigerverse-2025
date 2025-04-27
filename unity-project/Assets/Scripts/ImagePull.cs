@@ -8,8 +8,8 @@ using System;
 
 public class ImagePull : MonoBehaviour
 {
-    public string imageListUrl = "https://tigerverse-2025.onrender.com/images"; // This gives array of IDs
-    public string imageFetchUrlBase = "https://tigerverse-2025.onrender.com/image/"; // Base for downloading by ID
+    private string imageListUrl = "https://tigerverse-2025.onrender.com/images"; // This gives array of IDs
+    private string imageFetchUrlBase = "https://tigerverse-2025.onrender.com/image/"; // Base for downloading by ID
     public GameObject prefabToCopy; // Drag your prefab here
     public Renderer imagePanel;
 
@@ -20,7 +20,7 @@ public class ImagePull : MonoBehaviour
 
     IEnumerator DownloadIDsAndImages()
     {
-        // Step 1: Get the array of IDs
+        // Get IDs
         UnityWebRequest request = UnityWebRequest.Get(imageListUrl);
         yield return request.SendWebRequest();
 
@@ -32,7 +32,7 @@ public class ImagePull : MonoBehaviour
 
         string jsonResult = request.downloadHandler.text;
 
-        // Step 2: Manually parse the array
+        // Parse array
         List<string> ids = ParseJsonArray(jsonResult);
 
         if (ids == null || ids.Count == 0)
@@ -41,7 +41,7 @@ public class ImagePull : MonoBehaviour
             yield break;
         }
 
-        // Step 3: For each ID, pull the image
+        // Pull imgs from ids
         foreach (string id in ids)
         {
             StartCoroutine(DownloadImageAndCreatePrefab(id));
@@ -113,7 +113,7 @@ public class ImagePull : MonoBehaviour
         json = json.Trim();
         if (json.StartsWith("[") && json.EndsWith("]"))
         {
-            json = json.Substring(1, json.Length - 2); // remove [ and ]
+            json = json.Substring(1, json.Length - 2);
 
             string[] rawObjects = json.Split(new string[] { "},{" }, StringSplitOptions.None);
 
