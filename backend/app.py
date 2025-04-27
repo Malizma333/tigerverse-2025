@@ -5,6 +5,8 @@ import os
 from dotenv import load_dotenv
 from flask_cors import CORS
 from bson import ObjectId
+import cv2 as cv
+import numpy as np
 
 load_dotenv()
 
@@ -25,8 +27,25 @@ def upload_image():
     if file.filename == '':
         return 'No selected file', 400
 
-    image_id = fs.put(file, filename=file.filename)
-    return jsonify({"id": str(image_id)}), 200
+    original_image_id = fs.put(file, filename=file.filename)
+
+    file.stream.seek(0)
+    image_data = file.read()
+
+    np_img = np.frombuffer(image_data, np.uint8)
+
+    img = cv2.imdecode(np_img, cv2.IMREAD_GRAYSCALE)
+
+    edges = cv2.Canny(img, 100, 200)
+
+    _, buffer = cv2.imencode('.jpg', edges)
+
+    processed_image_id = fs.put(buffer.tobytes(), filename=f"processed_{file.filename}")
+
+    return jsonify({
+        "id": str(original_image_id),
+        "processed_id": str(processed_image_id)
+    }), 200
 
 @app.route('/image/<id>')
 def get_image(id):
