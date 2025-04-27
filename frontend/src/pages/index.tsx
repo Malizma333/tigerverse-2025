@@ -144,7 +144,6 @@ export default function Home() {
           >
             Make the world <br></br>
             <span className="text-pink-400 relative mr-12">
-              {/* Conditionally render the circle SVG */}
               {showCircleSvg && (
                 <object
                   className="absolute -top-6 -left-13"
@@ -152,7 +151,7 @@ export default function Home() {
                   type="image/svg+xml"
                   width={250}
                   height={150}
-                  aria-hidden="true" // Added for accessibility if purely decorative
+                  aria-hidden="true"
                 />
               )}
               your

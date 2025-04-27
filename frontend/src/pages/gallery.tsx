@@ -120,7 +120,7 @@ export default function Gallery() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
         >
-          <h1 className="text-3xl sm:text-4xl text-neutral-950 font-bold mb-4">
+          <h1 className="text-3xl sm:text-4xl mt-12 text-neutral-950 font-bold mb-4">
             Welcome to the Gallery
           </h1>
           <p className="text-lg text-neutral-600">
@@ -138,11 +138,14 @@ export default function Gallery() {
             (imageInfos.length === 0 ? (
               <p className="text-center text-neutral-500">No images found.</p>
             ) : (
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-wrap justify-center gap-8">
                 {imageInfos.map((imgInfo) => (
-                  <div
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
                     key={imgInfo.parent_id}
-                    className="bg-gray-100 rounded shadow overflow-hidden flex flex-col items-center p-1"
+                    className="bg-neutral-100 rounded shadow overflow-hidden flex flex-col items-center p-1"
                   >
                     <img
                       src={`${API_BASE_URL}/image/${imgInfo.original}`}
@@ -162,7 +165,7 @@ export default function Gallery() {
                         );
                       }}
                     />
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             ))}
