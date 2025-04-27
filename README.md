@@ -1,5 +1,5 @@
 # ARtist
-Make the canvas **your** world.
+Make the world **your** canvas.
 
 Submitted for TigerVerse 2025 held at the University of Missouri.
 ## Inspiration
