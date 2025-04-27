@@ -1,5 +1,5 @@
 # ARtist
-
+Submitted for TigerVerse 2025 held at the University of Missouri.
 ## Inspiration
 We all share the frustration of trying to translate a mental or reference image onto a physical surface. **ARtist** uses the power of AR to overlay a perfectly scalable digital guide onto any real-world canvas, bridging the gap between vision and execution. Our goal is to inspire anyone to confidently bring their ideas to life and experience the joy of creation by making the process intuitive and accessible.
 
