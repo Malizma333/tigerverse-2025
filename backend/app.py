@@ -44,9 +44,9 @@ def upload_image():
     blurred_img = cv.GaussianBlur(img, (5, 5), 0)
 
     # Apply Canny edge detection
-    t_lower = 100
-    t_upper = 200
-    aperture_size = 3
+    t_lower = 500
+    t_upper = 600
+    aperture_size = 5
     edges = cv.Canny(blurred_img, t_lower, t_upper, apertureSize=aperture_size)
 
     # Encode the processed image back to JPEG format
