@@ -46,7 +46,7 @@ def upload_image():
     edges1 = cv.Canny(denoised_img, t_lower1, t_upper1, apertureSize=aperture_size1)
 
     transparent_bg_blue = np.zeros((edges1.shape[0], edges1.shape[1], 4), dtype=np.uint8)
-    transparent_bg_blue[np.where(edges1 > 0)] = [0, 0, 255, 255] # Blue RGBA
+    transparent_bg_blue[np.where(edges1 > 0)] = [0, 255, 0, 255] # Blue RGBA
 
     success_blue, buffer_blue = cv.imencode('.png', transparent_bg_blue)
     if not success_blue:
