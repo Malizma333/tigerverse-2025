@@ -52,21 +52,25 @@ def upload_image():
 
     _, buffer_yellow = cv.imencode('.png', transparent_bg_yellow)
 
-    # Combine all images into a single dictionary
-    images = {
-        "original": image_data,
-        "blue_edges": buffer_blue.tobytes(),
-        "yellow_edges": buffer_yellow.tobytes()
+    # Save all images to GridFS
+    original_id = fs.put(image_data, filename=f"original_{file.filename}")
+    blue_edges_id = fs.put(buffer_blue.tobytes(), filename=f"blue_edges_{file.filename}")
+    yellow_edges_id = fs.put(buffer_yellow.tobytes(), filename=f"yellow_edges_{file.filename}")
+
+    # Create a parent document in MongoDB to associate all images
+    parent_document = {
+        "original": str(original_id),
+        "blue_edges": str(blue_edges_id),
+        "yellow_edges": str(yellow_edges_id),
+        "filename": file.filename
     }
-
-    # Serialize the dictionary using pickle
-    serialized_data = pickle.dumps(images)
-
-    # Save the serialized data to GridFS
-    combined_image_id = fs.put(serialized_data, filename=f"combined_{file.filename}")
+    parent_id = db.image_metadata.insert_one(parent_document).inserted_id
 
     return jsonify({
-        "combined_id": str(combined_image_id)
+        "parent_id": str(parent_id),
+        "original_id": str(original_id),
+        "blue_edges_id": str(blue_edges_id),
+        "yellow_edges_id": str(yellow_edges_id)
     }), 200
 
 
