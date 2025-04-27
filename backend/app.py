@@ -36,9 +36,9 @@ def upload_image():
 
     img = cv.imdecode(np_img, cv.IMREAD_GRAYSCALE)
 
-    t_lower = 100  
-    t_upper = 200  
-    aperture_size = 3
+    t_lower = 50
+    t_upper = 100
+    aperture_size = 5
     edge = cv.Canny(img, t_lower, t_upper, apertureSize=aperture_size)
 
     _, buffer = cv.imencode('.jpg', edge)
