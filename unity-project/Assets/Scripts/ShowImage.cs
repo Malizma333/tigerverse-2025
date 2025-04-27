@@ -5,6 +5,8 @@ public class ShowImage : MonoBehaviour
 {
     public GameObject imgSource; // UI Image source
     public Renderer target;      // Quad's Renderer
+    private GameObject scaleManager;
+    private float original = 0.25f;
 
     public void OnValueChanged(bool isOn)
     {
@@ -26,25 +28,23 @@ public class ShowImage : MonoBehaviour
                 float height = sourceImage.sprite.rect.height;
                 float aspect = width / height;
 
-                Vector3 originalScale = target.transform.localScale;
-                float baseScale = Mathf.Min(originalScale.x, originalScale.y);
-
-                Vector3 newScale = originalScale;
+                Vector3 newScale = new Vector3(0,0,0);
+                newScale.z = 1f;
 
                 if (aspect >= 1f)
                 {
                     // Wider than tall
-                    newScale.x = baseScale;
-                    newScale.y = baseScale / aspect;
+                    newScale.x = original;
+                    newScale.y = original / aspect;
                 }
                 else
                 {
                     // Taller than wide
-                    newScale.y = baseScale;
-                    newScale.x = baseScale * aspect;
+                    newScale.y = original;
+                    newScale.x = original * aspect;
                 }
 
-                target.transform.localScale = newScale;
+                target.transform.localScale = newScale * target.transform.localScale.z;
             }
             else
             {
