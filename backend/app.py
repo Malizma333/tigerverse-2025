@@ -40,8 +40,8 @@ def upload_image():
     denoised_img = cv.bilateralFilter(img, d=9, sigmaColor=75, sigmaSpace=75)
 
     # Logic 1: Blue edges
-    t_lower1 = 100
-    t_upper1 = 200
+    t_lower1 = 400
+    t_upper1 = 500
     aperture_size1 = 3
     edges1 = cv.Canny(denoised_img, t_lower1, t_upper1, apertureSize=aperture_size1)
 
