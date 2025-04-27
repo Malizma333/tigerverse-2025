@@ -63,8 +63,8 @@ export default function Home() {
     } catch (error) {
       console.error("Network or other error during upload:", error);
     } finally {
-      setSubmitting(false); // Reset submitting to false after submission completes
-      setSelectedImage(null); // Clear the selected image after submission
+      setSubmitting(false);
+      setSelectedImage(null);
     }
   };
 
@@ -144,34 +144,32 @@ export default function Home() {
 
           {selectedImage && (
             <>
-              {submitting && (
-                <div className="text-2xl -mt-4 font-extralight text-neutral-700 font-drawing">
-                  Selected: {selectedImage.name}
-                </div>
-              )}
+              <div className="text-2xl -mt-4 font-extralight text-neutral-700 font-drawing">
+                Selected: {selectedImage.name}
+              </div>
               <button
                 className={`
-              p-12
-              bg-[url('/button.svg')]
-              bg-center
-              bg-no-repeat
-              bg-contain
-              text-center
-              font-semibold
-              text-white
-              flex items-center justify-center
-              ${selectedImage ? "hover:scale-105" : ""}
-              transition-all
-              hover:cursor-pointer
-              duration-100
-              disabled:cursor-not-allowed
-              disabled:scale-100
-            `}
+                  p-12
+                  bg-[url('/button.svg')]
+                  bg-center
+                  bg-no-repeat
+                  bg-contain
+                  text-center
+                  font-semibold
+                  text-white
+                  flex items-center justify-center
+                  ${selectedImage ? "hover:scale-105" : ""}
+                  transition-all
+                  hover:cursor-pointer
+                  duration-100
+                  disabled:cursor-not-allowed
+                  disabled:scale-100
+                `}
                 type="submit"
-                disabled={!selectedImage || submitting} // Disable when submitting
+                disabled={!selectedImage || submitting}
               >
                 <div className="text-neutral-950 font-drawing text-3xl">
-                  {submitting ? "Submitting..." : "Submit"} {/* Change text */}
+                  {submitting ? "Submitting..." : "Submit"}
                 </div>
               </button>
             </>
