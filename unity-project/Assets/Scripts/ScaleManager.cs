@@ -6,7 +6,7 @@ public class ScaleManager : MonoBehaviour
 
     // Minimum and maximum values for the slider (scale range)
     public float minScale = 0.25f;
-    public float maxScale = 4f;
+    public float maxScale = 16f;
     public float curScale = 1f;
 
     void Awake() {
@@ -21,7 +21,7 @@ public class ScaleManager : MonoBehaviour
     public void UpdateScale(float value)
     {
         // Maintain the aspect ratio by setting the same scale for all axes
-        curScale = Mathf.Clamp(value, minScale, maxScale);
+        curScale = Mathf.Lerp(minScale, maxScale, value);
 
         // Update the object's scale, preserving the aspect ratio
         transform.localScale = baseTransform * curScale;
