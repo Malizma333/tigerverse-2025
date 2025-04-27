@@ -97,7 +97,7 @@ export default function Home() {
       <img
         src="bg-art/amongus.svg"
         alt=""
-        className="absolute -top-24 -left-16 h-1/3 z-10 animate-spin"
+        className="absolute -top-24 -left-16 h-1/3 z-10 animate-spin hidden"
       />
       <div
         className="absolute w-full h-full bg-[url('/background.png')] bg-size-[1000px] bg-center opacity-10"
@@ -142,7 +142,10 @@ export default function Home() {
             transition: { duration: 0.25, ease: "easeInOut" },
           }}
         >
-          <form onSubmit={handleSubmit} className="">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col w-full items-center gap-4"
+          >
             <label
               htmlFor={fileInputId}
               className="rounded-md w-fit z-10 transition-all duration-100 cursor-pointer"
