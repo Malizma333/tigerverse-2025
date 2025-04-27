@@ -10,7 +10,7 @@ public class ImagePull : MonoBehaviour
     private string imageListUrl = "https://tigerverse-2025.onrender.com/images";
     private string imageFetchUrlBase = "https://tigerverse-2025.onrender.com/image/";
     public GameObject prefabToCopy;
-    public Renderer imagePanel;
+    public GameObject imagePanel;
 
     void Start()
     {

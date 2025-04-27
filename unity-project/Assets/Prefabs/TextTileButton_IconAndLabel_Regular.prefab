@@ -191,9 +191,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageData:
-    original_id: 
-    detailed_id: 
-    textured_id: 
+    original: 
+    detailed: 
+    textured: 
 --- !u!1 &5993214964360580244
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,6 +643,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imgSource: {fileID: 6971479582284864975}
+  imgDataHolder: {fileID: 5197642335708490856}
   target: {fileID: 0}
 --- !u!1 &8899339558467091078
 GameObject:

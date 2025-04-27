@@ -8,8 +8,8 @@ using System;
 public class ShowImage : MonoBehaviour
 {
     public GameObject imgSource;
-    public Renderer target;
-    private GameObject scaleManager;
+    public GameObject imgDataHolder;
+    public GameObject target;
     private float original = 0.25f;
 
     public void OnValueChanged(bool isOn)
@@ -17,16 +17,30 @@ public class ShowImage : MonoBehaviour
         if (imgSource != null && target != null)
         {
             Image sourceImage = imgSource.GetComponent<Image>();
+            Debug.Log(sourceImage);
             if (sourceImage != null && sourceImage.sprite != null)
             {
                 Texture2D texture = SpriteToTexture2D(sourceImage.sprite);
-                target.material.mainTexture = texture;
-                ImageInfoHolder curr = imgSource.GetComponent<ImageInfoHolder>();
+                ImageInfoHolder curr = imgDataHolder.GetComponent<ImageInfoHolder>();
+                Transform scaleParent = target.transform.Find("ScaleParent");
 
-                if (curr != null)
+                if (scaleParent != null && curr != null)
                 {
-                    Transform detailedChild = target.transform.Find("Detailed");
-                    Transform texturedChild = target.transform.Find("Textured");
+                    Transform originalChild = scaleParent.Find("Original");
+                    Transform detailedChild = scaleParent.Find("Detailed");
+                    Transform texturedChild = scaleParent.Find("Textured");
+
+                    Debug.Log(originalChild);
+                    Debug.Log(detailedChild);
+
+                    if (originalChild != null)
+                    {
+                        Renderer ogRenderer = originalChild.GetComponent<Renderer>();
+                        if (ogRenderer != null)
+                        {
+                            StartCoroutine(DownloadAndSetTexture(curr.imageData.original, ogRenderer));
+                        }
+                    }
 
                     if (detailedChild != null)
                     {
@@ -93,6 +107,11 @@ public class ShowImage : MonoBehaviour
         }
 
         Texture2D texture = DownloadHandlerTexture.GetContent(request);
+        texture.mipMapBias = 0;
+        texture.filterMode = FilterMode.Point;
+        texture.anisoLevel = 0;
+        texture.Apply(updateMipmaps: false, makeNoLongerReadable: true);
+
         rendererTarget.material.mainTexture = texture;
     }
 
